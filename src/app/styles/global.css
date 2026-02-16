@@ -1,3 +1,24 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "RPG";
+  src: url("/fonts/base_font.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  /* Fonts */
+  --font-base: "RPG", serif;
+
+  /* Colors */
+  --color-primary: ;
+  --color-secondary: #6a7282;         /* light gray */
+  --color-white-override: #eef2ff;    /* not too white*/
+  --color-focus: #fff085;             /* gold border */
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -28,6 +49,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: var(--font-base);
 }
 
 h1 {
