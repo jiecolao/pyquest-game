@@ -11,6 +11,6 @@ interface DevToolProps {
 }
 
 export const useDevToolStore = create<DevToolProps>((set) => ({
-  devTool: true,
+  devTool: false,
   toggleDevTool: () => set((state) => ({devTool: !state.devTool}))
 }))

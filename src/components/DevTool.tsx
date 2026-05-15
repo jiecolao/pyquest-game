@@ -36,8 +36,6 @@ export default function DevTool() {
       toggleDevTool: s.toggleDevTool,
     })),
   );
-  if (!devTool) return null;
-
   const [input, setInput] = useState("");
   const { playerId, addInventoryItem } = useInventoryStore(
     useShallow((s) => ({
@@ -123,6 +121,8 @@ export default function DevTool() {
   const combo = useComboStore()
 
   const dev = useDevToolStore()
+
+  if (!devTool) return null;
 
   function randomBetween(min: number, max: number): number {
     const low = Math.max(0, Math.floor(Math.min(min, max)));

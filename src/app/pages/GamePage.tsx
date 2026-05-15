@@ -19,6 +19,7 @@ import {
   loadDungeonProfile,
   loadUserProfile,
 } from "@/src/game/store";
+import { useDevToolStore } from "@/src/game/store/devToolStore";
 import { InventoryNode } from "@/src/game/types/inventory.types";
 import BountyQuest from "@/src/components/ui/BountyQuest";
 import Dashboard from "@/src/components/ui/Dashboard";
@@ -68,6 +69,7 @@ export default function GamePage() {
     })),
   );
   const isDamaged = usePlayerStore((s) => s.isDamaged);
+  const toggleDevTool = useDevToolStore((s) => s.toggleDevTool);
 
   const lootInventoryRef = useRef<{
     getItems: (nodeIds: string[]) => InventoryNode[];
@@ -104,6 +106,26 @@ export default function GamePage() {
     return () =>
       window.removeEventListener("loot-dropped-to-player", handleLootDrop);
   }, []);
+
+  useEffect(() => {
+    const handleDevToolHotkey = (event: KeyboardEvent) => {
+      if (
+        event.ctrlKey &&
+        event.altKey &&
+        event.shiftKey &&
+        (event.code === "KeyD" || event.key.toLowerCase() === "d")
+      ) {
+        event.preventDefault();
+        toggleDevTool();
+      }
+    };
+
+    window.addEventListener("keydown", handleDevToolHotkey, { capture: true });
+    return () =>
+      window.removeEventListener("keydown", handleDevToolHotkey, {
+        capture: true,
+      });
+  }, [toggleDevTool]);
 
   // Transition effect when sceneBg changes
   useEffect(() => {

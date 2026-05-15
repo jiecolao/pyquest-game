@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useGameStore, useGuideStore, usePlayerStore, useSceneStore, useTerminalStore } from "@/src/game/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
 import { useInventoryStore } from "@/src/game/store/inventoryStore";
 import DevTool from "@/src/components/DevTool";
 import { registerUser, userExists } from "@/src/game/services/authService";
 import { useSoundStore } from "@/src/game/store/soundStore";
+import { useDevToolStore } from "@/src/game/store/devToolStore";
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [pendingAge, setPendingAge] = useState("");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingUsername, setPendingUsername] = useState("");
+  const toggleDevTool = useDevToolStore((s) => s.toggleDevTool)
   const { setUserId, setAge } = usePlayerStore(
     useShallow((s) => ({
       setUserId: s.setUserId,
@@ -29,6 +31,26 @@ export default function LoginPage() {
   const initSounds = useSoundStore(s => s.initSounds)
   const playMusic = useSoundStore(s => s.playMusic)
   const toggleGuide = useGuideStore(s => s.toggleGuide)
+
+  useEffect(() => {
+    const handleDevToolHotkey = (event: KeyboardEvent) => {
+      if (
+        event.ctrlKey &&
+        event.altKey &&
+        event.shiftKey &&
+        (event.code === "KeyD" || event.key.toLowerCase() === "d")
+      ) {
+        event.preventDefault();
+        toggleDevTool();
+      }
+    };
+
+    window.addEventListener("keydown", handleDevToolHotkey, { capture: true });
+    return () =>
+      window.removeEventListener("keydown", handleDevToolHotkey, {
+        capture: true,
+      });
+  }, [toggleDevTool])
 
   const proceedToGame = async (usernameToProcess: string, options?: { isNewUser?: boolean }) => {
     if (options?.isNewUser) {
