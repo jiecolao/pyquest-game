@@ -3,6 +3,8 @@
 An RPG Typing-Based Game for Python Learning
 
 ## Quick Start
+See the full Windows installation guide in INSTALLATION.md.
+
 ### Install packages
 ```
 npm install
